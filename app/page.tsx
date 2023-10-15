@@ -11,18 +11,30 @@ export default function Home() {
   const [consumption, setConsumption] = useState(0);
   const [blockNumber, setBlockNumber] = useState("");
   const [chain, setChain]: [any, any] = useState(null);
-  const [interval, setListeningInterval]: [any, any] = useState(null);
+  const [api, setApi]: [any, any] = useState(null);
 
   useEffect(() => {
-    start();
-  }, []);
+    if(!api) {
+      createApi();
+    }
 
-  const start = async () => {
+    if(!api) {
+      return;
+    }
+
+    const interval = setInterval(() => {
+      getConsumption(api);
+    }, 2000);
+
+    return () => clearInterval(interval);
+
+  }, [api]);
+
+  const createApi = async () => { 
     const wsProvider = new WsProvider('wss://moonbeam.public.blastapi.io');
     const api = await ApiPromise.create({provider: wsProvider});
-    console.log(api);
 
-    startListening(api);
+    setApi(api);
   }
 
   const getConsumption = async (api: any) => {
@@ -42,21 +54,11 @@ export default function Home() {
   }
 
   const handleChainChanged = async (chain: Chain) => {
-    console.log(interval);
-    clearInterval(interval);
     setChain(chain);
     const wsProvider = new WsProvider(chain.rpcs[0].url);
     const api = await ApiPromise.create({provider: wsProvider});
 
-    startListening(api);
-  }
-
-  const startListening = (api: any) => {
-    const newInterval = setInterval(() => {
-      getConsumption(api);
-    }, 2000);
-
-    setListeningInterval(newInterval);
+    setApi(api);
   }
 
   return (
