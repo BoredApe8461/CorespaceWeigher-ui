@@ -38,5 +38,8 @@ query Chains($relayId: String!) {
 export const getChains = async (): Promise<Array<Chain>> => {
     const response: any = await request(graphqlUrl, chainQuery, {relayId: "polkadot"});
 
-    return response.chains;
+    const chains = response.chains;
+    chains.sort((a: Chain, b: Chain) => a.name.localeCompare(b.name));
+
+    return chains;
 }
