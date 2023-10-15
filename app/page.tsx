@@ -29,8 +29,11 @@ export default function Home() {
   }, [api]);
 
   const getConsumption = async (api: any) => {
-    const name = await api.rpc.system.chain();
-    console.log(name.toHuman());
+    const paraId = (await api.query.parachainInfo.parachainId()).toJSON();
+    console.log(paraId);
+    if(paraId !== chain.paraId) {
+      return;
+    }
 
     const weightLimit: any = api.consts.system.blockWeights.toJSON();
 
