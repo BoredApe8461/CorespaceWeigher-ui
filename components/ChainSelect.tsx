@@ -3,15 +3,15 @@ import { useEffect, useState } from "react";
 import { Chain, getChains } from "@/chaindata";
 import Image from "next/image";
 
-const ChainSelect = ({setChain}: {setChain: any}) => {
+const ChainSelect = ({setChain, network}: {setChain: any, network: string}) => {
     const [chains, setChains]: [Array<Chain>, any] = useState([]);
     const [chainId, setChainId] = useState(0);
 
     useEffect(() => {
-      getChains().then((chains) => {
+      getChains(network).then((chains) => {
           setChains(chains);
       });
-    }, []);
+    }, [network]);
 
   return (
     <FormControl sx={{ m: 2, width: 400 }}>

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { ApiPromise, WsProvider } from '@polkadot/api';
 import ChainSelect from "../components/ChainSelect";
+import NetworkSelect from "../components/NetworkSelect";
 import { Card, CardContent, Grid, Typography } from "@mui/material";
 import Image from "next/image";
 import { Chain } from "@/chaindata";
@@ -19,6 +20,7 @@ export default function Home() {
   const [consumption, setConsumption]: [Consumption, any] = useState({ normal: 0, operational: 0, mandatory: 0, total: 0 });
   const [blockNumber, setBlockNumber] = useState("");
   const [chain, setChain]: [any, any] = useState(null);
+  const [network, setNetwork] = useState("polkadot");
   const [api, setApi]: [any, any] = useState(null);
   const [loading, setLoading]= useState(true);
 
@@ -134,8 +136,9 @@ export default function Home() {
       </>
       }
 
-      <div className="p-12">
-        <ChainSelect setChain={handleChainChanged}/>
+      <div className="p-12 flex items-center">
+        <ChainSelect setChain={handleChainChanged} network={network}/>
+        <NetworkSelect setNetwork={setNetwork} network={network}/>
       </div>
     </main>
   )
