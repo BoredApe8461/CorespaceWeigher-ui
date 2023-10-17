@@ -43,17 +43,31 @@ export default function Home() {
 
     const blockConsumption: any = (await api.query.system.blockWeight()).toJSON();
     const blockNumber: any = (await api.query.system.number()).toHuman();
-    const totalConsumption = blockConsumption.mandatory.refTime + blockConsumption.normal.refTime + blockConsumption.operational.refTime;
+
+    const totalConsumption = getTotalConsumption(blockConsumption);
+    const maxBlockRefTime = weightLimit.maxBlock.refTime? weightLimit.maxBlock.refTime : weightLimit.maxBlock;
+
+    const normal = blockConsumption.normal.refTime? blockConsumption.normal.refTime : blockConsumption.normal;
+    const operational = blockConsumption.operational.refTime? blockConsumption.operational.refTime : blockConsumption.operational;
+    const mandatory = blockConsumption.mandatory.refTime? blockConsumption.mandatory.refTime : blockConsumption.mandatory;
 
     let updatedConsumption: Consumption = {
-      total: Number(parseFloat((totalConsumption / weightLimit.maxBlock.refTime).toString()).toPrecision(3)) * 100,
-      normal: Number(parseFloat((blockConsumption.normal.refTime / weightLimit.maxBlock.refTime).toString()).toPrecision(3)) * 100,
-      operational: Number(parseFloat((blockConsumption.operational.refTime / weightLimit.maxBlock.refTime).toString()).toPrecision(3)) * 100,
-      mandatory: Number(parseFloat((blockConsumption.mandatory.refTime / weightLimit.maxBlock.refTime).toString()).toPrecision(3)) * 100,
+      total: Number(parseFloat((totalConsumption / maxBlockRefTime).toString()).toPrecision(3)) * 100,
+      normal: Number(parseFloat((normal / maxBlockRefTime).toString()).toPrecision(3)) * 100,
+      operational: Number(parseFloat((operational / maxBlockRefTime).toString()).toPrecision(3)) * 100,
+      mandatory: Number(parseFloat((mandatory / maxBlockRefTime).toString()).toPrecision(3)) * 100,
     } 
     setLoading(false);
     setConsumption(updatedConsumption);
     setBlockNumber(blockNumber);
+  }
+
+  const getTotalConsumption = (blockConsumption: any) => {
+    if(blockConsumption.mandatory.refTime) {
+      return blockConsumption.mandatory.refTime + blockConsumption.normal.refTime + blockConsumption.operational.refTime; 
+    }else {
+      return blockConsumption.mandatory + blockConsumption.normal + blockConsumption.operational; 
+    }
   }
 
   const handleChainChanged = async (_chain: Chain) => {
