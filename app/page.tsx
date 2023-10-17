@@ -47,9 +47,9 @@ export default function Home() {
     const totalConsumption = getTotalConsumption(blockConsumption);
     const maxBlockRefTime = weightLimit.maxBlock.refTime? weightLimit.maxBlock.refTime : weightLimit.maxBlock;
 
-    const normal = blockConsumption.normal.refTime? blockConsumption.normal.refTime : blockConsumption.normal;
-    const operational = blockConsumption.operational.refTime? blockConsumption.operational.refTime : blockConsumption.operational;
-    const mandatory = blockConsumption.mandatory.refTime? blockConsumption.mandatory.refTime : blockConsumption.mandatory;
+    const normal = blockConsumption.normal.refTime !== undefined ? blockConsumption.normal.refTime : blockConsumption.normal;
+    const operational = blockConsumption.operational.refTime !== undefined? blockConsumption.operational.refTime : blockConsumption.operational;
+    const mandatory = blockConsumption.mandatory.refTime !== undefined? blockConsumption.mandatory.refTime : blockConsumption.mandatory;
 
     let updatedConsumption: Consumption = {
       total: Number(parseFloat((totalConsumption / maxBlockRefTime).toString()).toPrecision(3)) * 100,
