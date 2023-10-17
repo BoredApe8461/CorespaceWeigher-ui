@@ -1,6 +1,6 @@
 import { FormControl, FormLabel, ListItem, ListItemIcon, ListItemText, MenuItem, TextField } from "@mui/material"
 import { useEffect, useState } from "react";
-import { Chain, getChains } from "@/chaindata";
+import { Chain, getChains } from "@/common/chaindata";
 import Image from "next/image";
 
 const ChainSelect = ({setChain, network}: {setChain: any, network: string}) => {
