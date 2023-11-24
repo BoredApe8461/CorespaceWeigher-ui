@@ -10,6 +10,7 @@ import { Chain } from "@/common/chaindata";
 import CircularProgress from '@mui/material/CircularProgress';
 import { Consumption } from "@/common/types";
 import ConsumptionGrid from "@/components/ConsumptionGrid";
+import ReftimeChart from "@/components/Chart";
 
 export default function Home() {
   const [consumption, setConsumption]: [Consumption, Dispatch<Consumption>] = useState({ normal: 0, operational: 0, mandatory: 0, total: 0 });
@@ -57,7 +58,13 @@ export default function Home() {
       operational: Number(parseFloat((operational / maxBlockRefTime).toString()).toPrecision(3)) * 100,
       mandatory: Number(parseFloat((mandatory / maxBlockRefTime).toString()).toPrecision(3)) * 100,
     } 
-    setLoading(false);
+
+    console.log(paraId);
+    console.log(chain.paraId);
+
+    if(paraId === chain.paraId) {
+      setLoading(false);
+    }
     setConsumption(updatedConsumption);
     setBlockNumber(blockNumber);
   }
@@ -72,6 +79,7 @@ export default function Home() {
 
   const handleChainChanged = async (_chain: Chain) => {
     setLoading(true);
+    console.log(_chain);
     setChain(_chain);
 
     createApi(_chain);
@@ -105,6 +113,8 @@ export default function Home() {
         <ChainSelect setChain={handleChainChanged} network={network}/>
         <NetworkSelect setNetwork={setNetwork} network={network}/>
       </div>
+
+      <ReftimeChart />
     </main>
   )
 }
