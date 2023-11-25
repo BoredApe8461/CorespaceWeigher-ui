@@ -11,13 +11,19 @@ function ReftimeChart({
   normal,
   mandatory,
   operational,
+  total
 }: {
   normal: Consumption[];
   operational: Consumption[];
   mandatory: Consumption[];
+  total: Consumption[];
 }) {
-  const axes = React.useMemo(
+  const data = React.useMemo(
     () => [
+      {
+        label: "Total consumption",
+        data: total,
+      },
       {
         label: "Normal consumption",
         data: normal,
@@ -37,6 +43,7 @@ function ReftimeChart({
   const primaryAxis = React.useMemo(
     (): AxisOptions<Consumption> => ({
       getValue: (d) => d.blockNumber,
+      position: "bottom",
     }),
     [],
   );
@@ -45,16 +52,25 @@ function ReftimeChart({
     (): AxisOptions<Consumption>[] => [
       {
         getValue: (d) => d.consumed,
+        stacked: false,
       },
     ],
     [],
   );
 
+  const seriesColors = ['#4FD0BC', '#A4D04F', '#7B4FD0', "#d04f64"];
+
   return (
     <div style={{ width: "800px", height: "300px" }}>
       <Chart
         options={{
-          data: axes,
+          getSeriesStyle: (series) => {
+            return {
+              color: seriesColors[series.index],
+              strokeWidth: 4,
+            }
+          },
+          data: data,
           primaryAxis,
           secondaryAxes,
         }}
@@ -71,6 +87,8 @@ const DataProvider = () => {
     any,
   ] = useState([]);
   const [mandatoryConsumption, setMandatoryConsumption]: [Consumption[], any] =
+    useState([]);
+  const [totalConsumption, setTotalConsumption]: [Consumption[], any] =
     useState([]);
 
   useEffect(() => {
@@ -100,10 +118,17 @@ const DataProvider = () => {
         consumed: record.mandatory * 100,
       };
     });
+    const total = result.map((record) => {
+      return {
+        blockNumber: record.block_number,
+        consumed: (record.normal + record.operational + record.mandatory)  * 100,
+      };
+    });
 
     setNormalConsumption(normal);
     setOperationalConsumption(operational);
     setMandatoryConsumption(mandatory);
+    setTotalConsumption(total);
   };
 
   return (
@@ -113,6 +138,7 @@ const DataProvider = () => {
           normal={normalConsumption}
           mandatory={mandatoryConsumption}
           operational={operationalConsumption}
+          total={totalConsumption}
         />
       )}
     </>
