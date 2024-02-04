@@ -1,18 +1,13 @@
-import Link from "next/link"
-
-import { siteConfig } from "@/config/site"
-import { buttonVariants } from "@/components/ui/button"
 import ChainSelect from "@/components/chain-select"
-import ConsumptionGrid from "@/components/consumption-grid"
 import NetworkSelect from "@/components/network-select"
 
-export default function IndexPage() {
+export default function SubscribePage() {
   return (
     <section className="">
       <div className="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
         <div className="mx-auto max-w-screen-sm text-center">
           <h2 className="mb-4 text-4xl tracking-tight font-extrabold leading-tight text-gray-900 dark:text-white">
-            Current Block Consumption
+            Register a Parachain
           </h2>
           <p className="mb-6 font-light text-gray-500 dark:text-gray-400 md:text-lg">
             Some Subtitle on what users can do here
@@ -22,7 +17,6 @@ export default function IndexPage() {
           <NetworkSelect />
           <ChainSelect />
         </div>
-        <ConsumptionGrid />
       </div>
     </section>
   )
