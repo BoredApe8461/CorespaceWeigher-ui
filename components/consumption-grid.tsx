@@ -170,7 +170,7 @@ const ConsumptionGrid = () => {
                 className="flex flex-col rounded-lg border border-gray-200 bg-white p-6 shadow-md transition-shadow hover:shadow-lg dark:border-gray-700 dark:bg-gray-800"
               >
                 <div className="mb-5 flex items-center justify-between text-gray-500"></div>
-                <h2 className="mb-2 text-xl tracking-tight text-gray-900 dark:text-white">
+                <h2 className="mb-2 text-gray-900 dark:text-white">
                   {card.title}
                 </h2>
                 <p className="flex-1 mb-5 text-sm font-light text-gray-500 dark:text-gray-400">
