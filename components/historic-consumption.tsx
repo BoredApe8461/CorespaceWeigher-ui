@@ -34,6 +34,7 @@ import { buttonVariants } from "@/components/ui/button"
 import ConsumptionChart from "./consumption-chart"
 import { Button } from "./ui/button"
 import { Checkbox } from "./ui/checkbox"
+import DownloadJSONButton from "./ui/download-json.button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -241,14 +242,16 @@ export function HistoricConsumption() {
         <div>
           <div className="export flex flex-col items-start justify-start gap-2">
             <div className="flex items-end">
-              <Button className="rounded-none rounded-s-md">Export JSON</Button>
+              <DownloadJSONButton
+                className="rounded-none rounded-s-md"
+                jsonData={historicConsumption || []}
+                fileName={`historic-consumption-${chain.name}-${displayedDateRange}.json`}
+              >
+                Export JSON
+              </DownloadJSONButton>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button
-                    // variant="outline"
-                    size="icon"
-                    className="rounded-none rounded-e-md"
-                  >
+                  <Button size="icon" className="rounded-none rounded-e-md">
                     <ChevronDown className="h-3 w-3" />
                   </Button>
                 </DropdownMenuTrigger>
