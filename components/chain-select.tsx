@@ -5,6 +5,7 @@ import Image from "next/image"
 import { Chain, getChains } from "@/common/chaindata"
 import { useChain } from "@/providers/chain-provider"
 
+import { useRegisteredChains } from "@/hooks/use-registered-chains"
 import {
   Select,
   SelectContent,
@@ -13,8 +14,13 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
-const ChainSelect = () => {
+const ChainSelect = ({
+  onlyRegistered = false,
+}: {
+  onlyRegistered: boolean
+}) => {
   const { chain, setChain, network } = useChain()
+  const { data: registeredChains, isLoading, isError } = useRegisteredChains()
 
   const [chains, setChains]: [Array<Chain>, any] = useState([])
   const [chainId, setChainId] = useState<number | undefined>(
@@ -22,10 +28,28 @@ const ChainSelect = () => {
   )
 
   useEffect(() => {
-    getChains(network).then((chains) => {
-      setChains(chains)
+    // Fetch chains based on the current network
+    getChains(network).then((allChains) => {
+      let filteredChains = allChains
+
+      console.log("chains", allChains)
+
+      // If onlyRegistered is true, further filter the chains to include only those that are registered
+      if (onlyRegistered && registeredChains) {
+        // filter chains to only include those that are registered on the current network i.e. relay and paraid are in the registeredChains array
+        filteredChains = allChains.filter((chain) =>
+          registeredChains.some(
+            (regChain) =>
+              regChain.relay_chain.toLowerCase() ===
+                chain.relay?.id.toLowerCase() &&
+              regChain.para_id === chain.paraId
+          )
+        )
+      }
+
+      setChains(filteredChains)
     })
-  }, [network])
+  }, [network, registeredChains, onlyRegistered])
 
   return (
     <>

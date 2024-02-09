@@ -11,12 +11,12 @@ export default async function HistoryPage() {
             Historic Consumption
           </h2>
           <p className="mb-6 font-light text-gray-500 dark:text-gray-400 md:text-lg">
-            Some Subtitle on what users can see here
+            See all the historic consumption data for registered parachains
           </p>
         </div>
         <div className="mb-4 flex gap-4 justify-center">
           <NetworkSelect />
-          <ChainSelect />
+          <ChainSelect onlyRegistered={true} />
         </div>
         <HistoricConsumption />
       </div>

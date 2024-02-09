@@ -1,9 +1,8 @@
-import React, { useMemo, useState } from "react"
-import { ChevronDown, ChevronRightIcon } from "lucide-react"
-// Assuming this is where your type is defined
-import moment from "moment"
+import React, { useMemo } from "react"
+import { useTheme } from "next-themes"
 import {
   CartesianGrid,
+  DotProps,
   Legend,
   Line,
   LineChart,
@@ -13,212 +12,223 @@ import {
   YAxis,
 } from "recharts"
 
-import { ConsumptionDatum } from "../common/types"
-import { Button } from "./ui/button"
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "./ui/dropdown-menu"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./ui/select"
+  ConsumptionDatum,
+  DataDisplay,
+  DateRange,
+  Grouping,
+} from "../common/types"
 
-// You might need to install moment for date manipulation
-
-type Grouping = "block_number" | "day" | "month" | "year"
-const groupingOptions: Grouping[] = ["block_number", "day", "month", "year"]
-
-type DateRange = "1d" | "7d" | "30d" | "90d" | "1y" | "all"
-const dateRangeOptions: DateRange[] = ["1d", "7d", "30d", "90d", "1y", "all"]
-
-type Props = {
-  data: ConsumptionDatum[]
-  grouping: Grouping
-}
-
-type GroupedData = {
-  [key: string]: {
-    timestamp: number
+export type RawData = {
+  ref_time: {
     normal: number
     operational: number
     mandatory: number
-    total: number
-    count: number
-    label?: string
   }
+  proof_size: {
+    normal: number
+    operational: number
+    mandatory: number
+  }
+  count: number
 }
 
-const formatData = (data: ConsumptionDatum[], grouping: Props["grouping"]) => {
-  const grouped: GroupedData = data.reduce((acc, cur) => {
-    let key, label
-    switch (grouping) {
-      case "day":
-        key = moment(cur.timestamp).format("YYYY-MM-DD") // Group by day
-        label = moment(cur.timestamp).format("MMM D, YYYY") // Format label as Month Day, Year
-        break
-      case "year":
-        key = moment(cur.timestamp).format("YYYY") // Group by year
-        label = moment(cur.timestamp).format("YYYY") // Format label as Year
-        break
-      case "month":
-        key = moment(cur.timestamp).format("YYYY-MM") // Group by month
-        label = moment(cur.timestamp).format("MMM, YYYY") // Format label as Month, Year
-        break
-      default:
-        key = cur.block_number.toString()
-    }
+type Props = {
+  data: ConsumptionDatum[] // The updated prop type to match the new data structure.
+  grouping: string
+  refTimeDisplayed: boolean
+  proofSizeDisplayed: boolean
+}
 
-    if (!acc[key]) {
-      acc[key] = {
-        timestamp: cur.timestamp,
-        normal: 0,
-        operational: 0,
-        mandatory: 0,
-        count: 0,
-        total: 0,
-        label,
-      }
-    }
+type ChartDatum = {
+  date: string // Used for labeling the x-axis.
+  avgRefTimeNormal: number
+  avgRefTimeOperational: number
+  avgRefTimeMandatory: number
+  avgRefTimeTotal: number
+  avgProofSizeNormal: number
+  avgProofSizeOperational: number
+  avgProofSizeMandatory: number
+  avgProofSizeTotal: number
+}
 
-    acc[key].normal += cur.ref_time.normal
-    acc[key].operational += cur.ref_time.operational
-    acc[key].mandatory += cur.ref_time.mandatory
-    acc[key].total +=
-      cur.ref_time.normal + cur.ref_time.operational + cur.ref_time.mandatory
-    acc[key].count += 1
+const colors = {
+  ref_time: {
+    normal: "#D32F2F", // Red 700
+    operational: "#1976D2", // Blue 700
+    mandatory: "#388E3C", // Green 700
+    total: "#FBC02D", // Yellow 700
+  },
+  proof_size: {
+    normal: "#7B1FA2", // Purple 700
+    operational: "#F57C00", // Orange 700
+    mandatory: "#C2185B", // Pink 700
+    total: "#00796B", // Teal 700
+  },
+}
 
-    return acc
-  }, {} as GroupedData)
+const CustomLegend = () => (
+  <div
+    style={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+  >
+    {/* Manually create legend items */}
+    <div style={{ marginRight: 20 }}>
+      <svg width="20" height="10">
+        <path
+          d="M 0 5 L 20 5"
+          stroke="#FF8F00"
+          strokeWidth="2"
+          strokeDasharray="5 5"
+        />
+      </svg>
+      Ref Time Normal
+    </div>
+    {/* Repeat for other datasets */}
+  </div>
+)
 
-  return Object.values(grouped)
-    .map((group) => ({
-      ...group,
-      normal: group.normal / group.count,
-      operational: group.operational / group.count,
-      mandatory: group.mandatory / group.count,
-      total: group.total / group.count,
+const CustomDot = (props: DotProps) => {
+  const { cx, cy, stroke } = props
+  return (
+    <svg>
+      {/* Render your custom shape here using SVG elements */}
+      {/* For example, to render a triangle */}
+      <polygon
+        points={`${cx},${cy - 6} ${cx + 6},${cy + 6} ${cx - 6},${cy + 6}`}
+        fill={stroke}
+      />
+    </svg>
+  )
+}
+
+const ConsumptionChart: React.FC<Props> = ({
+  data,
+  grouping,
+  refTimeDisplayed,
+  proofSizeDisplayed,
+}) => {
+  const { theme } = useTheme()
+
+  const formatData = (data: ConsumptionDatum[]): ChartDatum[] => {
+    return data.map((datum: ConsumptionDatum) => ({
+      date: datum.group,
+      avgRefTimeNormal: datum.ref_time.normal / datum.count,
+      avgRefTimeOperational: datum.ref_time.operational / datum.count,
+      avgRefTimeMandatory: datum.ref_time.mandatory / datum.count,
+      avgRefTimeTotal:
+        (datum.ref_time.normal +
+          datum.ref_time.operational +
+          datum.ref_time.mandatory) /
+        datum.count,
+      avgProofSizeNormal: datum.proof_size.normal / datum.count,
+      avgProofSizeOperational: datum.proof_size.operational / datum.count,
+      avgProofSizeMandatory: datum.proof_size.mandatory / datum.count,
+      avgProofSizeTotal:
+        (datum.proof_size.normal +
+          datum.proof_size.operational +
+          datum.proof_size.mandatory) /
+        datum.count,
     }))
-    .sort((a, b) => (a.timestamp as number) - (b.timestamp as number)) // Sorting as numbers for timestamps
-}
+  }
 
-const ConsumptionChart: React.FC<Props> = ({ data, grouping = "day" }) => {
-  const [group, setGroup] = useState<Grouping>(grouping)
-  const [range, setRange] = useState<DateRange>("30d")
-
-  const formattedData = useMemo(() => formatData(data, group), [data, group])
+  const formattedData = useMemo(() => formatData(data), [data])
 
   const formatYAxisTick = (value: any) => `${(value * 100).toFixed(2)}%`
   const formatTooltip = (value: any, name: any) => {
     return `${(value * 100).toFixed(2)}%`
   }
+  console.log("data points", data.length)
 
-  console.log("data points", formattedData.length)
+  // console.log("data points", formattedData.length)
 
   return (
     <div className="w-full rounded-lg bg-white p-4 shadow-md dark:bg-gray-900 dark:text-white ">
-      <div className="filters mb-4 flex items-end justify-end gap-2">
-        <div>
-          <span className="text-right text-xs">Group By</span>
-          <Select
-            onValueChange={(val: Grouping) => setGroup(val)}
-            value={group}
-          >
-            <SelectTrigger className="w-[180px] h-8">
-              <SelectValue placeholder="Select Network" />
-            </SelectTrigger>
-            <SelectContent>
-              {groupingOptions.map((grouping) => (
-                <SelectItem value={grouping} key={grouping}>
-                  {grouping}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <div>
-          <span className="text-right text-xs">Range</span>
-          <Select
-            onValueChange={(val: DateRange) => setRange(val)}
-            value={range}
-          >
-            <SelectTrigger className="w-[180px] h-8">
-              <SelectValue placeholder="Select Network" />
-            </SelectTrigger>
-            <SelectContent>
-              {dateRangeOptions.map((range) => (
-                <SelectItem value={range} key={range}>
-                  {range}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <div>
-          <div className="flex items-end">
-            <Button className="h-8 rounded-none rounded-s-sm">
-              Export JSON
-            </Button>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  // variant="outline"
-                  size="icon"
-                  className="h-8 rounded-none rounded-e-sm"
-                >
-                  <ChevronDown className="h-3 w-3" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56" align="end">
-                <DropdownMenuItem>All</DropdownMenuItem>
-                <DropdownMenuItem>
-                  Reftime Consumption & POV Consumption
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  Reftime Consumption over all Dispatch classes
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </div>
-      </div>
       <ResponsiveContainer width="100%" height={500}>
         <LineChart
-          height={550}
           data={formattedData}
           margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-          style={{ fontSize: "13px" }}
         >
-          <CartesianGrid strokeDasharray="2 2" />
-          <XAxis dataKey="label" />
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="date" />
           <YAxis tickFormatter={formatYAxisTick} />
           <Tooltip
             formatter={formatTooltip}
-            wrapperStyle={{ background: "#f2" }}
-            wrapperClassName="rounded-md text-black dark:text-white bg-white !dark:bg-gray-900 p-2 shadow-md dark:shadow-lg"
+            wrapperClassName="rounded-md text-black dark:text-white !bg-background p-2 shadow-md dark:shadow-lg"
             labelClassName="mb-2 p-0"
             itemStyle={{ padding: "0" }}
           />
           <Legend />
-          <Line
-            type="monotone"
-            dataKey="normal"
-            stroke="#8884d8"
-            activeDot={{ r: 5 }}
-          />
-          <Line type="monotone" dataKey="operational" stroke="#82ca9d" />
-          <Line type="monotone" dataKey="mandatory" stroke="#ffc658" />
-          <Line type="monotone" dataKey="total" stroke="#ff0000" />
+          {refTimeDisplayed && (
+            <>
+              <Line
+                type="monotone"
+                dataKey="avgRefTimeNormal"
+                stroke={colors.ref_time.normal}
+                name="Ref Time Normal"
+                activeDot={{ r: 6 }}
+              />
+              <Line
+                type="monotone"
+                dataKey="avgRefTimeOperational"
+                stroke={colors.ref_time.operational}
+                name="Ref Time Operational"
+                activeDot={{ r: 6 }}
+              />
+              <Line
+                type="monotone"
+                dataKey="avgRefTimeMandatory"
+                stroke={colors.ref_time.mandatory}
+                name="Ref Time Mandatory"
+                activeDot={{ r: 6 }}
+              />
+              <Line
+                type="monotone"
+                dataKey="avgRefTimeTotal"
+                stroke={colors.ref_time.total}
+                name="Ref Time Total"
+                activeDot={{ r: 6 }}
+              />
+            </>
+          )}
+          {proofSizeDisplayed && (
+            <>
+              <Line
+                type="monotone"
+                dataKey="avgProofSizeNormal"
+                stroke={colors.proof_size.normal}
+                name="Proof Size Normal"
+                strokeDasharray="8 2"
+                activeDot={{ r: 6 }}
+              />
+              <Line
+                type="monotone"
+                dataKey="avgProofSizeOperational"
+                stroke={colors.proof_size.operational}
+                name="Proof Size Operational"
+                strokeDasharray="8 2"
+                activeDot={{ r: 6 }}
+              />
+              <Line
+                type="monotone"
+                dataKey="avgProofSizeMandatory"
+                stroke={colors.proof_size.mandatory}
+                name="Proof Size Mandatory"
+                strokeDasharray="8 2"
+                activeDot={{ r: 6 }}
+              />
+              <Line
+                type="monotone"
+                dataKey="avgProofSizeTotal"
+                stroke={colors.proof_size.total}
+                name="Proof Size Total"
+                strokeDasharray="8 2"
+                activeDot={{ r: 6 }}
+              />
+            </>
+          )}
         </LineChart>
       </ResponsiveContainer>
+      {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
     </div>
   )
 }

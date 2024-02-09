@@ -1,6 +1,5 @@
 export type ConsumptionDatum = {
-  block_number: number
-  timestamp: number
+  group: string
   ref_time: {
     normal: number
     operational: number
@@ -11,6 +10,7 @@ export type ConsumptionDatum = {
     operational: number
     mandatory: number
   }
+  count: number
 }
 
 export type ConsumptionDataSeries = {
@@ -25,4 +25,8 @@ export type Consumption = {
   total: number
 }
 
+export type DataDisplay = "ref_time" | "proof_size" | "both"
+
 export type Network = "polkadot" | "kusama"
+export type DateRange = "day" | "week" | "month" | "year" | "all"
+export type Grouping = "day" | "minute" | "week" | "month" | "year"
