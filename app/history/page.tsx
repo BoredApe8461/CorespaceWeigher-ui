@@ -1,9 +1,3 @@
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
 import ChainSelect from "@/components/chain-select"
 import { HistoricConsumption } from "@/components/historic-consumption"
 import NetworkSelect from "@/components/network-select"

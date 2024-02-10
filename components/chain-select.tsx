@@ -4,12 +4,6 @@ import { useEffect, useState } from "react"
 import Image from "next/image"
 import { Chain, getChains } from "@/common/chaindata"
 import { useChain } from "@/providers/chain-provider"
-import {
-  differenceInDays,
-  differenceInHours,
-  differenceInMinutes,
-  formatDistanceToNow,
-} from "date-fns"
 
 import { useRegisteredChains } from "@/hooks/use-registered-chains"
 import {

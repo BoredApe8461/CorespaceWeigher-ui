@@ -4,12 +4,7 @@ import { useEffect, useState } from "react"
 import Image from "next/image"
 import { useChain } from "@/providers/chain-provider"
 import { bnToBn } from "@polkadot/util"
-import {
-  SubstrateChain,
-  formatBalance,
-  useBalance,
-  useInkathon,
-} from "@scio-labs/use-inkathon"
+import { formatBalance, useBalance, useInkathon } from "@scio-labs/use-inkathon"
 import { toast } from "sonner"
 
 import { siteConfig } from "@/config/site"
@@ -28,7 +23,6 @@ import {
 import { Button } from "@/components/ui/button"
 import ChainSelect from "@/components/chain-select"
 import { ConnectButton } from "@/components/connect-button"
-import { ConnectionSettings } from "@/components/connection-settings"
 import NetworkSelect from "@/components/network-select"
 
 import { registerWithServer } from "./post-tx"
@@ -40,22 +34,11 @@ type ChainStatus = {
 }
 
 export default function SubscribePage() {
-  const {
-    accounts,
-    activeAccount,
-    activeChain,
-    activeExtension,
-    activeSigner,
-    setActiveAccount,
-    api,
-    isConnected,
-    switchActiveChain,
-    isConnecting,
-  } = useInkathon()
-  const { tokenSymbol, tokenDecimals, reducibleBalance, freeBalance } =
-    useBalance(activeAccount?.address, true)
-
-  const amountFormatted = formatBalance(api, freeBalance)
+  const { activeAccount, api, isConnected } = useInkathon()
+  const { tokenDecimals, freeBalance } = useBalance(
+    activeAccount?.address,
+    true
+  )
 
   const { chain: selectedChain, network: selectedNetwork } = useChain()
   const { data: registeredChains, isLoading, isError } = useRegisteredChains()
@@ -136,6 +119,7 @@ export default function SubscribePage() {
         selectedNetwork
       )
     } catch (e) {
+      //@ts-ignore
       toast.error(e.message, { id: toastId })
       return
     }
@@ -228,7 +212,7 @@ export default function SubscribePage() {
                     <div className="flex flex-row mt-8 gap-2">
                       <ConnectButton size="lg" />
                       <AlertDialog>
-                        <AlertDialogTrigger>
+                        <AlertDialogTrigger disabled={!isConnected}>
                           <Button
                             size="lg"
                             className=""

@@ -2,7 +2,6 @@ import React, { useMemo } from "react"
 import { useTheme } from "next-themes"
 import {
   CartesianGrid,
-  DotProps,
   Legend,
   Line,
   LineChart,
@@ -12,12 +11,7 @@ import {
   YAxis,
 } from "recharts"
 
-import {
-  ConsumptionDatum,
-  DataDisplay,
-  DateRange,
-  Grouping,
-} from "../common/types"
+import { ConsumptionDatum } from "../common/types"
 
 export type RawData = {
   ref_time: {
@@ -67,43 +61,8 @@ const colors = {
   },
 }
 
-const CustomLegend = () => (
-  <div
-    style={{ display: "flex", justifyContent: "center", alignItems: "center" }}
-  >
-    {/* Manually create legend items */}
-    <div style={{ marginRight: 20 }}>
-      <svg width="20" height="10">
-        <path
-          d="M 0 5 L 20 5"
-          stroke="#FF8F00"
-          strokeWidth="2"
-          strokeDasharray="5 5"
-        />
-      </svg>
-      Ref Time Normal
-    </div>
-    {/* Repeat for other datasets */}
-  </div>
-)
-
-const CustomDot = (props: DotProps) => {
-  const { cx, cy, stroke } = props
-  return (
-    <svg>
-      {/* Render your custom shape here using SVG elements */}
-      {/* For example, to render a triangle */}
-      <polygon
-        points={`${cx},${cy - 6} ${cx + 6},${cy + 6} ${cx - 6},${cy + 6}`}
-        fill={stroke}
-      />
-    </svg>
-  )
-}
-
 const ConsumptionChart: React.FC<Props> = ({
   data,
-  grouping,
   refTimeDisplayed,
   proofSizeDisplayed,
 }) => {
@@ -137,9 +96,6 @@ const ConsumptionChart: React.FC<Props> = ({
   const formatTooltip = (value: any, name: any) => {
     return `${(value * 100).toFixed(2)}%`
   }
-  console.log("data points", data.length)
-
-  // console.log("data points", formattedData.length)
 
   return (
     <div className="w-full rounded-lg bg-white p-4 shadow-md dark:bg-gray-900 dark:text-white ">
