@@ -1,6 +1,6 @@
-# next-template
+# Polkadot utilization tracker
 
-A Next.js 13 template for building apps with Radix UI and Tailwind CSS.
+Keeps track of blockspace utilization of each Polkadot parachain.
 
 ## Usage
 
