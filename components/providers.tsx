@@ -1,6 +1,7 @@
 "use client"
 
 import { ChainProvider } from "@/providers/chain-provider"
+import { TooltipProvider } from "@radix-ui/react-tooltip"
 import {
   SubstrateChain,
   UseInkathonProvider,
@@ -39,9 +40,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
           <UseInkathonProvider
             appName="Polkadot Weigher"
             defaultChain={defaultChain}
-            connectOnInit={true}
+            // connectOnInit={true}
           >
-            {children}
+            <TooltipProvider>{children}</TooltipProvider>
           </UseInkathonProvider>
         </ChainProvider>
       </QueryClientProvider>

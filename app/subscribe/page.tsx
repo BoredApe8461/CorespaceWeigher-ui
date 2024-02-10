@@ -27,6 +27,8 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import ChainSelect from "@/components/chain-select"
+import { ConnectButton } from "@/components/connect-button"
+import { ConnectionSettings } from "@/components/connection-settings"
 import NetworkSelect from "@/components/network-select"
 
 import { registerWithServer } from "./post-tx"
@@ -175,31 +177,6 @@ export default function SubscribePage() {
           </p>
         </div>
 
-        {/* <div>
-          Benefits of registering a chain
-
-        </div>
-
-        <div>{JSON.stringify(registeredChains, null, 2)}</div> 
-  */}
-
-        <div>
-          accounts: {accounts?.map((account) => account.address).join(", ")}
-          <br />
-          activeAccount: {activeAccount?.address}
-          <br />
-          activeChain: {activeChain?.name}
-          <br />
-          activeExtension: {activeExtension?.name}
-          <br />
-          <br />
-          isConnected: {isConnected ? "true" : "false"}
-          <br />
-          isConnecting: {isConnecting ? "true" : "false"}
-          <br />
-          <b>freeBalance: {amountFormatted}</b>
-        </div>
-
         <div className="mb-4 flex gap-4 justify-center">
           <NetworkSelect />
           <ChainSelect />
@@ -214,17 +191,20 @@ export default function SubscribePage() {
                   <b>{chainStatus.expiryInDays}</b> days
                 </h2>
                 {chainStatus.expiryInDays && chainStatus.expiryInDays < 70 && (
-                  <Button size="lg" className="mt-4">
-                    Renew Subscription for
-                    <Image
-                      src={selectedChain.logo}
-                      alt="logo"
-                      width={32}
-                      height={32}
-                      className="mx-2 inline-block"
-                    />
-                    <span>{selectedChain.name}</span>
-                  </Button>
+                  <div className="flex flex-row gap-2 mt-4 items-center justify-center">
+                    <ConnectButton size="lg" />
+                    <Button size="lg" className="" disabled={!isConnected}>
+                      Renew Subscription for
+                      <Image
+                        src={selectedChain.logo}
+                        alt="logo"
+                        width={32}
+                        height={32}
+                        className="mx-2 inline-block"
+                      />
+                      <span>{selectedChain.name}</span>
+                    </Button>
+                  </div>
                 )}
               </div>
             ) : (
@@ -245,54 +225,62 @@ export default function SubscribePage() {
                         <li>Data displayed on the historic consumption page</li>
                       </ul>
                     </div>
-                    <AlertDialog>
-                      <AlertDialogTrigger>
-                        <Button size="lg" className="mt-8">
-                          Register{" "}
-                          <Image
-                            src={selectedChain.logo}
-                            alt="logo"
-                            width={32}
-                            height={32}
-                            className="mx-2 inline-block"
-                          />
-                          <span className="mr-1">{selectedChain.name}</span>
-                          for 0.01ROC now!
-                        </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>
-                            {selectedChain.name} Subscription
-                          </AlertDialogTitle>
-                        </AlertDialogHeader>
-                        <div>
-                          <p>
-                            Registering {selectedChain.name} on PolkadotWeigher
-                            will allow you to track its consumption and view
-                            historic consumption data.
-                          </p>
-                          <p className="mt-4">
-                            The subscription will cost <b>30 DOT</b> per 90days.
-                          </p>
-                        </div>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction
-                            className="flex-1"
-                            onClick={handleSubscribe}
-                            disabled={isAccountBalanceInsufficient}
+                    <div className="flex flex-row mt-8 gap-2">
+                      <ConnectButton size="lg" />
+                      <AlertDialog>
+                        <AlertDialogTrigger>
+                          <Button
+                            size="lg"
+                            className=""
+                            disabled={!isConnected}
                           >
-                            Subscribe
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                        {isAccountBalanceInsufficient && (
-                          <div className="text-orange-500 text-xs text-right">
-                            ⚠️ Your account balance is too low to subscribe
+                            Register{" "}
+                            <Image
+                              src={selectedChain.logo}
+                              alt="logo"
+                              width={32}
+                              height={32}
+                              className="mx-2 inline-block"
+                            />
+                            <span className="mr-1">{selectedChain.name}</span>
+                            for 0.01ROC now!
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>
+                              {selectedChain.name} Subscription
+                            </AlertDialogTitle>
+                          </AlertDialogHeader>
+                          <div>
+                            <p>
+                              Registering {selectedChain.name} on
+                              PolkadotWeigher will allow you to track its
+                              consumption and view historic consumption data.
+                            </p>
+                            <p className="mt-4">
+                              The subscription will cost <b>30 DOT</b> per
+                              90days.
+                            </p>
                           </div>
-                        )}
-                      </AlertDialogContent>
-                    </AlertDialog>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                              className="flex-1"
+                              onClick={handleSubscribe}
+                              disabled={isAccountBalanceInsufficient}
+                            >
+                              Subscribe
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                          {isAccountBalanceInsufficient && (
+                            <div className="text-orange-500 text-xs text-right">
+                              ⚠️ Your account balance is too low to subscribe
+                            </div>
+                          )}
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </div>
                   </div>
                 </div>
               </section>
