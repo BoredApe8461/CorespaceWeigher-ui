@@ -17,6 +17,7 @@ npm run build
 
 ## Features
 
+- useInkathon
 - Next.js 13 App Directory
 - Radix UI Primitives
 - Tailwind CSS
