@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import Link from "next/link"
 import { DataDisplay, DateRange, Grouping } from "@/common/types"
 import { useChain } from "@/providers/chain-provider"
 import {
@@ -186,7 +187,11 @@ export function HistoricConsumption() {
       <section className="">
         <div className="mx-auto max-w-screen-xl">
           <div className="mb-4 flex flex-col items-center text-sm text-gray-500 ">
-            Error fetching historic consumption data
+            Error fetching historic consumption data. It seems the selected
+            chain is not registered yet.
+            <Link href="/subscribe">
+              <Button className="mt-4">Register Chain</Button>
+            </Link>
           </div>
         </div>
       </section>
@@ -231,7 +236,7 @@ export function HistoricConsumption() {
 
             <Button
               onClick={goToNext}
-              variant="outline"
+              variant="default"
               disabled={disableNext}
               className="ml-1"
             >
@@ -243,13 +248,14 @@ export function HistoricConsumption() {
           <div className="export flex flex-col items-start justify-start gap-2">
             <div className="flex items-end">
               <DownloadJSONButton
-                className="rounded-none rounded-s-md"
+                className="rounded-md"
                 jsonData={historicConsumption || []}
                 fileName={`historic-consumption-${chain.name}-${displayedDateRange}.json`}
               >
                 Export JSON
               </DownloadJSONButton>
-              <DropdownMenu>
+
+              {/* <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button size="icon" className="rounded-none rounded-e-md">
                     <ChevronDown className="h-3 w-3" />
@@ -264,7 +270,7 @@ export function HistoricConsumption() {
                     Reftime Consumption over all Dispatch classes
                   </DropdownMenuItem>
                 </DropdownMenuContent>
-              </DropdownMenu>
+              </DropdownMenu> */}
             </div>
           </div>
         </div>

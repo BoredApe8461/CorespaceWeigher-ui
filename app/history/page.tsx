@@ -1,6 +1,13 @@
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 import ChainSelect from "@/components/chain-select"
 import { HistoricConsumption } from "@/components/historic-consumption"
 import NetworkSelect from "@/components/network-select"
+import { TooltipTitle } from "@/components/tooltip-title"
 
 export default async function HistoryPage() {
   return (
@@ -11,7 +18,7 @@ export default async function HistoryPage() {
             Historic Consumption
           </h2>
           <p className="mb-6 font-light text-gray-500 dark:text-gray-400 md:text-lg">
-            See all the historic consumption data for registered parachains
+            <TooltipTitle />
           </p>
         </div>
         <div className="mb-4 flex gap-4 justify-center">

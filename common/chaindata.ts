@@ -3,43 +3,40 @@ import { gql, request } from "graphql-request"
 const graphqlUrl = "https://squid.subsquid.io/chaindata/v/v4/graphql"
 
 export type Chain = {
-  id: string;
-  name: string;
-  paraId: number | null;
+  id: string
+  name: string
+  paraId: number | null
   relay: {
     id: string
-  } | null;
-  rpcs: Array<{ url: string }>,
+  } | null
+  rpcs: Array<{ url: string }>
   logo: string
 }
 
 const chainQuery = gql`
-query Chains($relayId: String!) {
-  chains(
-    where: {
-      relay: { id_eq: $relayId }
-    }
-  ) {
-    id
-    name
-    paraId
-    relay {
+  query Chains($relayId: String!) {
+    chains(where: { relay: { id_eq: $relayId } }) {
       id
+      name
+      paraId
+      relay {
+        id
+      }
+      rpcs {
+        url
+      }
+      logo
     }
-    rpcs {
-      url
-    }
-    logo
   }
-}
-`;
-
+`
 
 export const getChains = async (network: string): Promise<Array<Chain>> => {
-    const response: any = await request(graphqlUrl, chainQuery, {relayId: network});
+  const response: any = await request(graphqlUrl, chainQuery, {
+    relayId: network,
+  })
 
-    const chains = response.chains;
-    chains.sort((a: Chain, b: Chain) => a.name.localeCompare(b.name));
+  const chains = response.chains
+  chains.sort((a: Chain, b: Chain) => a.name.localeCompare(b.name))
 
-    return chains;
+  return chains
 }

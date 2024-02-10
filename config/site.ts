@@ -6,6 +6,8 @@ export const siteConfig = {
   name: "Polkadot Weigher",
   description: "Displays utilization of Polkadot parachains.",
   backendUrl: "http://35.233.43.85:8000",
+  blockExplorer: "https://rococo.subscan.io/extrinsic/",
+  subscriptionCost: "10000000000000000", // cost to register a parachain
   mainNav: [
     {
       title: "Historic Consumption",

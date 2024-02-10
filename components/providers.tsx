@@ -20,9 +20,17 @@ const polkadotRelay: SubstrateChain = {
   testnet: false,
 }
 
+const rococoTestnet: SubstrateChain = {
+  network: "Rococo",
+  name: "Rococo Testnet",
+  rpcUrls: ["wss://rococo-rpc.polkadot.io"],
+  ss58Prefix: 42,
+  testnet: true,
+}
+
 export function Providers({ children }: { children: React.ReactNode }) {
   const queryClient = new QueryClient()
-  const defaultChain = polkadotRelay || development
+  const defaultChain = rococoTestnet || development
 
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>

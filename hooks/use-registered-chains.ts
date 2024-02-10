@@ -23,5 +23,6 @@ export function useRegisteredChains() {
       }
       return res.json()
     },
+    retry: 1,
   })
 }

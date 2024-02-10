@@ -4,6 +4,12 @@ import { useEffect, useState } from "react"
 import Image from "next/image"
 import { Chain, getChains } from "@/common/chaindata"
 import { useChain } from "@/providers/chain-provider"
+import {
+  differenceInDays,
+  differenceInHours,
+  differenceInMinutes,
+  formatDistanceToNow,
+} from "date-fns"
 
 import { useRegisteredChains } from "@/hooks/use-registered-chains"
 import {
@@ -17,7 +23,7 @@ import {
 const ChainSelect = ({
   onlyRegistered = false,
 }: {
-  onlyRegistered: boolean
+  onlyRegistered?: boolean
 }) => {
   const { chain, setChain, network } = useChain()
   const { data: registeredChains, isLoading, isError } = useRegisteredChains()
