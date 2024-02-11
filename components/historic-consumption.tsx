@@ -188,7 +188,7 @@ export function HistoricConsumption() {
         <div className="mx-auto max-w-screen-xl">
           <div className="mb-4 flex flex-col items-center text-sm text-gray-500 ">
             Error fetching historic consumption data. It seems the selected
-            chain is not registered yet.
+            chain is not registered yet or there is no data yet.
             <Link href="/subscribe">
               <Button className="mt-4">Register Chain</Button>
             </Link>
@@ -254,23 +254,6 @@ export function HistoricConsumption() {
               >
                 Export JSON
               </DownloadJSONButton>
-
-              {/* TODO different expoots <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button size="icon" className="rounded-none rounded-e-md">
-                    <ChevronDown className="h-3 w-3" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56" align="end">
-                  <DropdownMenuItem>All</DropdownMenuItem>
-                  <DropdownMenuItem>
-                    Reftime Consumption & POV Consumption
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    Reftime Consumption over all Dispatch classes
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu> */}
             </div>
           </div>
         </div>

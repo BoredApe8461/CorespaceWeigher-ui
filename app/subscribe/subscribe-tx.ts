@@ -64,7 +64,7 @@ export const subscribeTx = async (
   return new Promise(async (resolve, reject) => {
     try {
       const remarkFn = api.tx.system.remark(
-        `${uppercaseFirstLetter(network)}:${chain.paraId}`
+        `regionx-weigher::${uppercaseFirstLetter(network)}:${chain.paraId}`
       )
 
       const transferFn = (api.tx.balances[

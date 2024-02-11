@@ -196,17 +196,28 @@ export default function SubscribePage() {
                 <div className="py-8 px-4 mx-auto sm:py-16 lg:px-6">
                   <div className="mx-auto flex items-center flex-col">
                     <h2 className="mb-4 text-2xl tracking-tight font-extrabold leading-tight text-gray-900 dark:text-white">
-                      {selectedChain.name} is not registered yet. Registering a
-                      chain will allow:
+                      {selectedChain.name} is not registered yet. Registering a chain will allow:
                     </h2>
                     <div className="m">
-                      <ul className="list-disc ml-2 text-left">
-                        <li>Computational consumption tracking</li>
-                        <li>Storage consumption tracking</li>
-                        <li>Identify moments of peak consumption</li>
-                        <li>Identify periods of high and low usage</li>
-                        <li>Data categorization across dispatch classes</li>
-                        <li>Data displayed on the historic consumption page</li>
+                      <ul className="list-disc ml-2 text-left" style={{maxWidth: "400px"}}>
+                        <li style={{margin: "1em"}}>
+                          <strong style={{fontSize:"1.1em"}}>Computational Consumption Tracking: </strong>
+                           Gain precise insights into the computational demands of processing and validating blocks within your network.</li>
+                        <li style={{margin: "1em"}}>
+                          <strong style={{fontSize:"1.1em"}}>Detailed Proof Size Analysis: </strong>
+                           Analyze the size of validation proofs to of blocks within your network.</li>
+                        <li style={{margin: "1em"}}>
+                          <strong style={{fontSize:"1.1em"}}>Identification of Peak Consumption Periods: </strong>
+                           Discover exact moments when your network experiences maximum load.</li>
+                        <li style={{margin: "1em"}}>
+                          <strong style={{fontSize:"1.1em"}}>Insights into Usage Patterns: </strong> 
+                          Uncover patterns of high and low network activity over time.</li>
+                        <li style={{margin: "1em"}}>
+                          <strong style={{fontSize:"1.1em"}}>Data Categorization: </strong>
+                           Categorization of data for over all dispatch classes.</li>
+                        <li style={{margin: "1em"}}>
+                          <strong style={{fontSize:"1.1em"}}>Historical Consumption Data Visualization: </strong>
+                           Access comprehensive visualizations of historical network consumption on a dedicated page.</li>
                       </ul>
                     </div>
                     <div className="flex flex-row mt-8 gap-2">
@@ -227,7 +238,7 @@ export default function SubscribePage() {
                               className="mx-2 inline-block"
                             />
                             <span className="mr-1">{selectedChain.name}</span>
-                            for 0.01ROC now!
+                            for 20 DOT now!
                           </Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
@@ -243,7 +254,7 @@ export default function SubscribePage() {
                               consumption and view historic consumption data.
                             </p>
                             <p className="mt-4">
-                              The subscription will cost <b>30 DOT</b> per
+                              The subscription will cost <b>20 DOT</b> per
                               90days.
                             </p>
                           </div>

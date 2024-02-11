@@ -1,6 +1,6 @@
 "use client"
 
-import { FC, useMemo, useState } from "react"
+import { FC, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { InjectedAccount } from "@polkadot/extension-inject/types"
@@ -9,7 +9,6 @@ import {
   SubstrateWalletPlatform,
   allSubstrateWallets,
   isWalletInstalled,
-  useBalance,
   useInkathon,
 } from "@scio-labs/use-inkathon"
 import { ArrowUpRight, CheckCircle, ChevronDown } from "lucide-react"
