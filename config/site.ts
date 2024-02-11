@@ -22,7 +22,7 @@ const rococoTestnet: SubstrateChain = {
 export const siteConfig = {
   name: "Polkadot Weigher",
   description: "Displays utilization of Polkadot parachains.",
-  backendUrl: "http://35.233.43.85:8000",
+  backendUrl: "https://api.polkadot-weigher.com",
   defaultChain: rococoTestnet || development,
   blockExplorer: "https://rococo.subscan.io/extrinsic/",
   subscriptionCost: "1000000000", // cost to register a parachain
