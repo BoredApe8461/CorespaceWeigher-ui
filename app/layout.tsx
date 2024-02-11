@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils"
 import { Providers } from "@/components/providers"
 import { SiteHeader } from "@/components/site-header"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
+import { Footer } from "@/components/footer"
 
 export const metadata: Metadata = {
   title: {
@@ -17,7 +18,7 @@ export const metadata: Metadata = {
   description: siteConfig.description,
   icons: {
     icon: "/favicon.ico",
-    shortcut: "/favicon-16x16.png",
+    shortcut: "/regionx-logo.png",
     apple: "/apple-touch-icon.png",
   },
 }
@@ -42,6 +43,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
               <SiteHeader />
               <div className="flex-1">{children}</div>
               <Toaster richColors />
+            <Footer />
             </div>
             <TailwindIndicator />
           </Providers>
