@@ -25,13 +25,18 @@ import ChainSelect from "@/components/chain-select"
 import { ConnectButton } from "@/components/connect-button"
 import NetworkSelect from "@/components/network-select"
 
-import { registerWithServer } from "./post-tx"
+import { extendWithServer, registerWithServer } from "./post-tx"
 import { subscribeTx } from "./subscribe-tx"
 
 type ChainStatus = {
   registered: boolean
   expiryInDays?: number | undefined
 }
+
+enum Operation {
+  Register,
+  Extend
+};
 
 export default function SubscribePage() {
   const { activeAccount, api, isConnected } = useInkathon()
@@ -89,7 +94,7 @@ export default function SubscribePage() {
     setChainStatus(chainStatus)
   }, [selectedChain, registeredChains])
 
-  async function handleSubscribe() {
+  async function handleSubscribe(op: Operation) {
     if (!api || !activeAccount || !selectedNetwork || !selectedChain?.paraId) {
       return
     }
@@ -111,11 +116,19 @@ export default function SubscribePage() {
     }
 
     try {
-      const res2 = await registerWithServer(
-        parseInt(blockNumber),
-        selectedChain.paraId,
-        selectedNetwork
-      )
+      if(op == Operation.Extend) {
+        const _ = await extendWithServer(
+          parseInt(blockNumber),
+          selectedChain.paraId,
+          selectedNetwork
+        );
+      }else if(op == Operation.Register) {
+        const _ = await registerWithServer(
+          parseInt(blockNumber),
+          selectedChain.paraId,
+          selectedNetwork
+        );
+      }
     } catch (e) {
       //@ts-ignore
       toast.error(e.message, { id: toastId })
@@ -175,17 +188,59 @@ export default function SubscribePage() {
                 {chainStatus.expiryInDays && chainStatus.expiryInDays < 7 && (
                   <div className="flex flex-row gap-2 mt-4 items-center justify-center">
                     <ConnectButton size="lg" />
-                    <Button size="lg" className="" disabled={!isConnected}>
-                      Renew Subscription for
-                      <Image
-                        src={selectedChain.logo}
-                        alt="logo"
-                        width={32}
-                        height={32}
-                        className="mx-2 inline-block"
-                      />
-                      <span>{selectedChain.name}</span>
-                    </Button>
+                    <AlertDialog>
+                      <AlertDialogTrigger disabled={!isConnected}>
+                        <Button
+                          size="lg"
+                          className=""
+                          disabled={!isConnected}
+                        >
+                          Extend {" "}
+                          <Image
+                            src={selectedChain.logo}
+                            alt="logo"
+                            width={32}
+                            height={32}
+                            className="mx-2 inline-block"
+                          />
+                          <span className="mr-1">{selectedChain.name}</span>
+                          subscription for 20 DOT
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>
+                            {selectedChain.name} Subscription
+                          </AlertDialogTitle>
+                        </AlertDialogHeader>
+                        <div>
+                          <p>
+                            Extending {selectedChain.name} subscription
+                            PolkadotWeigher will allow you to track its
+                            consumption for the upcoming period of 90 days.
+                          </p>
+                          <p className="mt-4">
+                            The subscription renewal costs <b>20 DOT</b> and will expire
+                            in 90days.
+                          </p>
+                        </div>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction
+                            className="flex-1"
+                            onClick={() => handleSubscribe(Operation.Extend)}
+                            disabled={isAccountBalanceInsufficient}
+                          >
+                            Renew
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                        {isAccountBalanceInsufficient && (
+                          <div className="text-orange-500 text-xs text-right">
+                            ⚠️ Your account balance is too low to subscribe
+                          </div>
+                        )}
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </div>
                 )}
               </div>
@@ -253,18 +308,18 @@ export default function SubscribePage() {
                             <p>
                               Registering {selectedChain.name} on
                               PolkadotWeigher will allow you to track its
-                              consumption and view historic consumption data.
+                              consumption for the upcoming period of 90 days.
                             </p>
                             <p className="mt-4">
-                              The subscription will cost <b>20 DOT</b> per
-                              90days.
+                              The subscription costs <b>20 DOT</b> and will expire
+                              in 90days.
                             </p>
                           </div>
                           <AlertDialogFooter>
                             <AlertDialogCancel>Cancel</AlertDialogCancel>
                             <AlertDialogAction
                               className="flex-1"
-                              onClick={handleSubscribe}
+                              onClick={() => handleSubscribe(Operation.Register)}
                               disabled={isAccountBalanceInsufficient}
                             >
                               Subscribe
