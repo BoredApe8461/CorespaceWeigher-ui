@@ -1,22 +1,54 @@
-import './globals.css'
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import "@/styles/globals.css"
+import { Metadata } from "next"
+import { Toaster } from "sonner"
 
-const inter = Inter({ subsets: ['latin'] })
+import { siteConfig } from "@/config/site"
+import { fontSans, inter } from "@/lib/fonts"
+import { cn } from "@/lib/utils"
+import { Providers } from "@/components/providers"
+import { SiteHeader } from "@/components/site-header"
+import { TailwindIndicator } from "@/components/tailwind-indicator"
+import { Footer } from "@/components/footer"
 
 export const metadata: Metadata = {
-  title: 'Polkadot weigher',
-  description: 'Displays utilization of Polkadot parachains',
+  title: {
+    default: siteConfig.name,
+    template: `%s - ${siteConfig.name}`,
+  },
+  description: siteConfig.description,
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/regionx-logo.png",
+    apple: "/apple-touch-icon.png",
+  },
 }
 
-export default function RootLayout({
-  children,
-}: {
+interface RootLayoutProps {
   children: React.ReactNode
-}) {
+}
+
+export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
-    </html>
+    <>
+      <html lang="en" suppressHydrationWarning>
+        <head />
+        <body
+          className={cn(
+            "min-h-screen bg-background font-sans antialiased",
+            inter.className
+          )}
+        >
+          <Providers>
+            <div className="relative flex min-h-screen flex-col">
+              <SiteHeader />
+              <div className="flex-1">{children}</div>
+              <Toaster richColors />
+            <Footer />
+            </div>
+            <TailwindIndicator />
+          </Providers>
+        </body>
+      </html>
+    </>
   )
 }
