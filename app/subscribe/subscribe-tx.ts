@@ -125,28 +125,6 @@ export const subscribeTx = async (
 
             unsub?.()
           }
-
-          // if (isInBlock && errorEvent) {
-          //   // Reject if `ExtrinsicFailed` event was found
-          //   reject({
-          //     errorMessage: "ExtrinsicFailed",
-          //     errorEvent,
-          //   } satisfies TransferBalanceResult)
-          //   unsub?.()
-          // }
-
-          // if (isInBlock) {
-          //   // Otherwise resolve succesfully if transaction is in block
-          //   //resolve({ result })
-          //   console.log("in block", result)
-          //   // unsub?.()
-          // }
-
-          // if (isFinalized) {
-          //   // Otherwise resolve succesfully if transaction is finalized
-          //   resolve({ result })
-          //   unsub?.()
-          // }
         }
       )
     } catch (e: any) {

@@ -102,8 +102,6 @@ export default function SubscribePage() {
       selectedChain
     )
 
-    console.log("resultssss from subscribeTx", result)
-
     //@ts-ignore
     const blockNumber = result?.blockNumber.toString()
 
@@ -174,7 +172,7 @@ export default function SubscribePage() {
                   {selectedChain.name} is already registered and will expire in:{" "}
                   <b>{chainStatus.expiryInDays}</b> days
                 </h2>
-                {chainStatus.expiryInDays && chainStatus.expiryInDays < 70 && (
+                {chainStatus.expiryInDays && chainStatus.expiryInDays < 7 && (
                   <div className="flex flex-row gap-2 mt-4 items-center justify-center">
                     <ConnectButton size="lg" />
                     <Button size="lg" className="" disabled={!isConnected}>
@@ -198,27 +196,31 @@ export default function SubscribePage() {
                     <h2 className="mb-4 text-2xl tracking-tight font-extrabold leading-tight text-gray-900 dark:text-white">
                       {selectedChain.name} is not registered yet. Registering a chain will allow:
                     </h2>
-                    <div className="m">
-                      <ul className="list-disc ml-2 text-left" style={{maxWidth: "400px"}}>
-                        <li style={{margin: "1em"}}>
-                          <strong style={{fontSize:"1.1em"}}>Computational Consumption Tracking: </strong>
-                           Gain precise insights into the computational demands of processing and validating blocks within your network.</li>
-                        <li style={{margin: "1em"}}>
-                          <strong style={{fontSize:"1.1em"}}>Detailed Proof Size Analysis: </strong>
-                           Analyze the size of validation proofs to of blocks within your network.</li>
-                        <li style={{margin: "1em"}}>
-                          <strong style={{fontSize:"1.1em"}}>Identification of Peak Consumption Periods: </strong>
-                           Discover exact moments when your network experiences maximum load.</li>
-                        <li style={{margin: "1em"}}>
-                          <strong style={{fontSize:"1.1em"}}>Insights into Usage Patterns: </strong> 
-                          Uncover patterns of high and low network activity over time.</li>
-                        <li style={{margin: "1em"}}>
-                          <strong style={{fontSize:"1.1em"}}>Data Categorization: </strong>
-                           Categorization of data for over all dispatch classes.</li>
-                        <li style={{margin: "1em"}}>
-                          <strong style={{fontSize:"1.1em"}}>Historical Consumption Data Visualization: </strong>
-                           Access comprehensive visualizations of historical network consumption on a dedicated page.</li>
-                      </ul>
+                    <div className="grid grid-cols-3 gap-6 my-12">
+                      <Fetaure 
+                        title="Computational Consumption Tracking" 
+                        content="Gain precise insights into the computational demands of processing and validating blocks within your network."
+                      />
+                      <Fetaure 
+                        title="Detailed Proof Size Analysis" 
+                        content="Analyze the size of validation proofs to of blocks within your network."
+                      />
+                      <Fetaure 
+                        title="Identification of Peak Consumption Periods" 
+                        content="Discover exact moments when your network experiences maximum load."
+                      />
+                      <Fetaure 
+                        title="Insights into Usage Patterns" 
+                        content="Uncover patterns of high and low network activity over time."
+                      />
+                      <Fetaure 
+                        title="Data Categorization" 
+                        content="Categorization of data for over all dispatch classes."
+                      />
+                      <Fetaure 
+                        title="Historical Consumption Data Visualization" 
+                        content="Access comprehensive visualizations of historical network consumption on a dedicated page."
+                      />
                     </div>
                     <div className="flex flex-row mt-8 gap-2">
                       <ConnectButton size="lg" />
@@ -284,5 +286,21 @@ export default function SubscribePage() {
         )}
       </div>
     </section>
+  )
+}
+
+interface FeatureProps {
+  title: string,
+  content: string,
+}
+
+const Fetaure = ({title, content}: FeatureProps) => {
+  return (
+    <div className="border-dashed border-2 border-sky-500 p-2 hover:border-solid rounded">
+      <h3 className="text-xl m-2 font-normal">{title}</h3>
+      <p className="m-2 font-light">
+        {content}
+      </p>
+    </div>
   )
 }
