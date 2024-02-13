@@ -55,7 +55,7 @@ export const useConsumption = ({
       page,
       pageSize,
     ],
-    enabled: !!chainId && !!network && !!api && !!range,
+    enabled: !!(chainId !== null) && !!network && !!api && !!range,
     queryFn: async () => {
       const res = await fetch(endpoint)
 

@@ -34,8 +34,7 @@ const ConsumptionGrid = () => {
   }, [chain])
 
   const getConsumption = async (api: any) => {
-    const paraId = (await api.query.parachainInfo.parachainId()).toJSON()
-    if (!chain || paraId !== chain.paraId) {
+    if (!chain) {
       return
     }
 

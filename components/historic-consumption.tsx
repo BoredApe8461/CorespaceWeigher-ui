@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { DataDisplay, DateRange, Grouping } from "@/common/types"
+import { DataDisplay, DateRange } from "@/common/types"
 import { useChain } from "@/providers/chain-provider"
 import {
   addDays,
@@ -12,39 +12,27 @@ import {
   endOfMonth,
   endOfWeek,
   format,
-  isAfter,
   isBefore,
+  startOfDay,
   startOfMonth,
   startOfWeek,
   subDays,
   subMonths,
   subWeeks,
+  subYears,
 } from "date-fns"
 import {
-  Calendar,
   CalendarIcon,
-  ChevronDown,
   ChevronLeftIcon,
   ChevronRightIcon,
 } from "lucide-react"
 
-import { siteConfig } from "@/config/site"
 import { useConsumption, useEarliestConsumption } from "@/hooks/use-consumption"
-import { buttonVariants } from "@/components/ui/button"
 
 import ConsumptionChart from "./consumption-chart"
 import { Button } from "./ui/button"
 import { Checkbox } from "./ui/checkbox"
 import DownloadJSONButton from "./ui/download-json.button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "./ui/dropdown-menu"
 import {
   Select,
   SelectContent,
@@ -54,16 +42,15 @@ import {
 } from "./ui/select"
 import { Skeleton } from "./ui/skeleton"
 
-const groupingOptions: Grouping[] = ["day", "week", "month", "year"]
 const dateRangeOptions: DateRange[] = ["day", "week", "month", "year", "all"]
 
 export function HistoricConsumption() {
-  const [range, setRange] = useState<DateRange>("week")
+  const [range, setRange] = useState<DateRange>("day")
   const [currentRangeStart, setCurrentRangeStart] = useState(() =>
-    startOfWeek(new Date(), { weekStartsOn: 1 })
+    startOfDay(new Date())
   )
   const [currentRangeEnd, setCurrentRangeEnd] = useState(() =>
-    endOfWeek(new Date(), { weekStartsOn: 1 })
+    endOfDay(new Date())
   )
 
   const [dataDisplay, setDataDisplay] = useState<DataDisplay>("ref_time")
@@ -80,20 +67,20 @@ export function HistoricConsumption() {
     isFetching,
   } = useConsumption({ range, start: currentRangeStart, end: currentRangeEnd })
 
-  const { data: earliestDataEntry } = useEarliestConsumption()
+  const { data: earliestDataEntry } = useEarliestConsumption();
   const earliestDataDate = earliestDataEntry?.[0].group
     ? new Date(earliestDataEntry[0].group)
-    : new Date("2020-01-01")
+    : new Date("2020-01-01");
 
-  const latestDataDate = new Date() // Example latest data date, assuming it's today for simplicity
+  const latestDataDate = new Date(); // Example latest data date, assuming it's today for simplicity
 
-  const today = new Date()
-  const endOfToday = endOfDay(today)
+  const today = new Date();
+  const endOfToday = endOfDay(today);
 
   //Determine if the "previous" or "next" buttons should be disabled
   const disablePrevious = isBefore(
     currentRangeStart,
-    addWeeks(earliestDataDate, 1)
+    earliestDataDate
   )
   const disableNext = !isBefore(currentRangeEnd, endOfToday)
 
@@ -118,7 +105,7 @@ export function HistoricConsumption() {
     range,
     currentRangeStart,
     currentRangeEnd
-  )
+  );
 
   // Handlers for changing the week/month
   const goToPrevious = () => {
@@ -132,8 +119,8 @@ export function HistoricConsumption() {
       setCurrentRangeStart((prev) => subMonths(prev, 1))
       setCurrentRangeEnd((prev) => subMonths(prev, 1))
     } else if (range === "year") {
-      setCurrentRangeStart((prev) => subMonths(prev, 12))
-      setCurrentRangeEnd((prev) => subMonths(prev, 12))
+      setCurrentRangeStart((prev) => subYears(prev, 12))
+      setCurrentRangeEnd((prev) => subYears(prev, 12))
     } else if (range === "all") {
       setCurrentRangeStart(earliestDataDate)
       setCurrentRangeEnd(latestDataDate)
@@ -161,7 +148,10 @@ export function HistoricConsumption() {
 
   // Effect to adjust range when `range` state changes
   useEffect(() => {
-    if (range === "week") {
+    if (range === "day") {
+      setCurrentRangeStart(startOfDay(new Date()))
+      setCurrentRangeEnd(endOfDay(new Date()))
+    } else if (range === "week") {
       setCurrentRangeStart(startOfWeek(new Date(), { weekStartsOn: 1 }))
       setCurrentRangeEnd(endOfWeek(new Date(), { weekStartsOn: 1 }))
     } else if (range === "month") {

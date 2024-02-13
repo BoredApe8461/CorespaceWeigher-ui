@@ -1,7 +1,3 @@
-import Link from "next/link"
-
-import { siteConfig } from "@/config/site"
-import { buttonVariants } from "@/components/ui/button"
 import ChainSelect from "@/components/chain-select"
 import ConsumptionGrid from "@/components/consumption-grid"
 import NetworkSelect from "@/components/network-select"
@@ -15,7 +11,7 @@ export default function IndexPage() {
             Current Block Consumption
           </h2>
           <p className="mb-6 font-light text-gray-500 dark:text-gray-400 md:text-lg">
-            Some Subtitle on what users can do here
+            Monitor the real-time block space utilization of all Polkadot and Kusama parachains.
           </p>
         </div>
         <div className="mb-4 flex gap-4 justify-center">
