@@ -41,7 +41,7 @@ export function RegisteredChains() {
         <h3 className="text-xl text-center">Registered chains:</h3>
         <div className="flex justify-center">
             {chains.map((chain) => (
-                <Image className="m-6" src={chain.logo} alt={chain.name} width="50" height="50" />
+                <Image key={chain.id} className="m-6" src={chain.logo} alt={chain.name} width="50" height="50" />
             ))}
         </div>
     </div>
