@@ -30,9 +30,7 @@ const ChainSelect = ({
   useEffect(() => {
     // Fetch chains based on the current network
     getChains(network).then((allChains) => {
-      let filteredChains = allChains
-
-      console.log("chains", allChains)
+      let filteredChains = allChains;
 
       // If onlyRegistered is true, further filter the chains to include only those that are registered
       if (onlyRegistered && registeredChains) {
@@ -50,8 +48,6 @@ const ChainSelect = ({
       setChains(filteredChains)
     })
   }, [network, registeredChains, onlyRegistered])
-
-  console.log(chainId)
 
   return (
     <>

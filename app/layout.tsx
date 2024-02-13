@@ -9,6 +9,7 @@ import { Providers } from "@/components/providers"
 import { SiteHeader } from "@/components/site-header"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
 import { Footer } from "@/components/footer"
+import { RegisteredChains } from "@/components/registered-chains"
 
 export const metadata: Metadata = {
   title: {
@@ -43,6 +44,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
               <SiteHeader />
               <div className="flex-1">{children}</div>
               <Toaster richColors />
+            <RegisteredChains />
             <Footer />
             </div>
             <TailwindIndicator />
