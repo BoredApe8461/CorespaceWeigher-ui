@@ -127,6 +127,7 @@ export const ConnectButton: FC<ConnectButtonProps> = ({ size }) => {
           {/* Available Accounts/Wallets */}
           <DropdownMenuSeparator />
           {(accounts || []).map((acc) => {
+            if(acc.type == "ethereum") return;
             const encodedAddress = encodeAddress(
               acc.address,
               activeChain?.ss58Prefix || 42

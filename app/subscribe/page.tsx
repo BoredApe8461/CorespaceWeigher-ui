@@ -95,7 +95,8 @@ export default function SubscribePage() {
   }, [selectedChain, registeredChains])
 
   async function handleSubscribe(op: Operation) {
-    if (!api || !activeAccount || !selectedNetwork || !selectedChain?.paraId) {
+    if (!api || !activeAccount || !selectedNetwork || 
+      selectedChain?.paraId == null || selectedChain?.paraId == undefined) {
       return
     }
 
@@ -322,12 +323,12 @@ export default function SubscribePage() {
                               onClick={() => handleSubscribe(Operation.Register)}
                               disabled={isAccountBalanceInsufficient}
                             >
-                              Subscribe
+                              Register
                             </AlertDialogAction>
                           </AlertDialogFooter>
                           {isAccountBalanceInsufficient && (
                             <div className="text-orange-500 text-xs text-right">
-                              ⚠️ Your account balance is too low to subscribe
+                              ⚠️ Your account balance is too low to register
                             </div>
                           )}
                         </AlertDialogContent>

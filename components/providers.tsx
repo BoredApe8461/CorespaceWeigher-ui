@@ -29,7 +29,6 @@ const rococoTestnet: SubstrateChain = {
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const queryClient = new QueryClient()
-  const defaultChain = rococoTestnet || development
 
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
@@ -37,7 +36,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
         <ChainProvider>
           <UseInkathonProvider
             appName="Polkadot Weigher"
-            defaultChain={defaultChain}
+            defaultChain={polkadotRelay}
             // connectOnInit={true}
           >
             <TooltipProvider>{children}</TooltipProvider>

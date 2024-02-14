@@ -53,7 +53,7 @@ export const subscribeTx = async (
   }
 
   const toAddress =
-    "0x307183930b2264c5165f4a210a99520c5f1672b0413d57769fabc19e6866fb25"
+    "1C8BPSDDuaK2Rk8LgjFKpm9BsuFva7EfJWZ6s8XGg7FVwPn"
 
   const toastId = toast.loading(
     `Awaiting signature for subscribing to ${

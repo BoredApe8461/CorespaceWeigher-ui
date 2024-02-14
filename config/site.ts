@@ -1,5 +1,4 @@
 import { DateRange } from "@/common/types"
-import { SubstrateChain, development } from "@scio-labs/use-inkathon"
 
 export type SiteConfig = typeof siteConfig
 
@@ -7,8 +6,8 @@ export const siteConfig = {
   name: "Polkadot Weigher",
   description: "Displays utilization of Polkadot parachains.",
   backendUrl: "https://api.polkadot-weigher.com",
-  blockExplorer: "https://rococo.subscan.io/extrinsic/",
-  subscriptionCost: "1000000000", // cost to register a parachain
+  blockExplorer: "https://polkadot.subscan.io//extrinsic/",
+  subscriptionCost: "200000000000", // cost to register a parachain
   mainNav: [
     {
       title: "Historic Consumption",
