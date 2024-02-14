@@ -186,7 +186,7 @@ export default function SubscribePage() {
                   {selectedChain.name} is already registered and will expire in:{" "}
                   <b>{chainStatus.expiryInDays}</b> days
                 </h2>
-                {chainStatus.expiryInDays && chainStatus.expiryInDays < 7 && (
+                {chainStatus.expiryInDays && chainStatus.expiryInDays < 30 && (
                   <div className="flex flex-row gap-2 mt-4 items-center justify-center">
                     <ConnectButton size="lg" />
                     <AlertDialog>
