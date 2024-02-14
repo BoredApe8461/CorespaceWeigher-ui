@@ -6,17 +6,21 @@ import { DataDisplay, DateRange } from "@/common/types"
 import { useChain } from "@/providers/chain-provider"
 import {
   addDays,
+  addHours,
   addMonths,
   addWeeks,
   endOfDay,
+  endOfHour,
   endOfMonth,
   endOfWeek,
   format,
   isBefore,
   startOfDay,
+  startOfHour,
   startOfMonth,
   startOfWeek,
   subDays,
+  subHours,
   subMonths,
   subWeeks,
   subYears,
@@ -42,15 +46,15 @@ import {
 } from "./ui/select"
 import { Skeleton } from "./ui/skeleton"
 
-const dateRangeOptions: DateRange[] = ["day", "week", "month", "year", "all"]
+const dateRangeOptions: DateRange[] = ["hour", "day", "week", "month", "year", "all"]
 
 export function HistoricConsumption() {
-  const [range, setRange] = useState<DateRange>("day")
+  const [range, setRange] = useState<DateRange>("hour")
   const [currentRangeStart, setCurrentRangeStart] = useState(() =>
-    startOfDay(new Date())
+    startOfHour(new Date())
   )
   const [currentRangeEnd, setCurrentRangeEnd] = useState(() =>
-    endOfDay(new Date())
+    endOfHour(new Date())
   )
 
   const [dataDisplay, setDataDisplay] = useState<DataDisplay>("ref_time")
@@ -75,7 +79,7 @@ export function HistoricConsumption() {
   const latestDataDate = new Date(); // Example latest data date, assuming it's today for simplicity
 
   const today = new Date();
-  const endOfToday = endOfDay(today);
+  const endOfToday = endOfHour(today);
 
   //Determine if the "previous" or "next" buttons should be disabled
   const disablePrevious = isBefore(
@@ -86,6 +90,8 @@ export function HistoricConsumption() {
 
   const formatDateRangeDisplay = (range: DateRange, start: Date, end: Date) => {
     switch (range) {
+      case "hour":
+        return format(start, "MMM dd, yyyy hh:mm") // Single day
       case "day":
         return format(start, "MMM dd, yyyy") // Single day
       case "week":
@@ -109,7 +115,10 @@ export function HistoricConsumption() {
 
   // Handlers for changing the week/month
   const goToPrevious = () => {
-    if (range === "day") {
+    if (range === "hour") {
+      setCurrentRangeStart((prev) => subHours(prev, 1))
+      setCurrentRangeEnd((prev) => subHours(prev, 1))
+    }else if (range === "day") {
       setCurrentRangeStart((prev) => subDays(prev, 1))
       setCurrentRangeEnd((prev) => subDays(prev, 1))
     } else if (range === "week") {
@@ -128,7 +137,10 @@ export function HistoricConsumption() {
   }
 
   const goToNext = () => {
-    if (range === "day") {
+    if (range === "hour") {
+      setCurrentRangeStart((prev) => addHours(prev, 1))
+      setCurrentRangeEnd((prev) => addHours(prev, 1))
+    }else if (range === "day") {
       setCurrentRangeStart((prev) => addDays(prev, 1))
       setCurrentRangeEnd((prev) => addDays(prev, 1))
     } else if (range === "week") {
@@ -148,7 +160,10 @@ export function HistoricConsumption() {
 
   // Effect to adjust range when `range` state changes
   useEffect(() => {
-    if (range === "day") {
+    if (range === "hour") {
+      setCurrentRangeStart(startOfHour(new Date()))
+      setCurrentRangeEnd(endOfHour(new Date()))
+    } else if (range === "day") {
       setCurrentRangeStart(startOfDay(new Date()))
       setCurrentRangeEnd(endOfDay(new Date()))
     } else if (range === "week") {

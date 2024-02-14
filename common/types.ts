@@ -28,5 +28,5 @@ export type Consumption = {
 export type DataDisplay = "ref_time" | "proof_size" | "both"
 
 export type Network = "polkadot" | "kusama"
-export type DateRange = "day" | "week" | "month" | "year" | "all"
+export type DateRange = "hour" | "day" | "week" | "month" | "year" | "all"
 export type Grouping = "day" | "minute" | "week" | "month" | "year"

@@ -23,6 +23,7 @@ export const siteConfig = {
   },
   defaultDateRange: "week" as DateRange,
   rangeGroupingMap: {
+    hour: "minute",
     day: "hour",
     week: "hour",
     month: "day",
