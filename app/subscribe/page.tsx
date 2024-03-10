@@ -205,7 +205,7 @@ export default function SubscribePage() {
                             className="mx-2 inline-block"
                           />
                           <span className="mr-1">{selectedChain.name}</span>
-                          subscription for 20 DOT
+                          subscription for 10 DOT
                         </Button>
                       </AlertDialogTrigger>
                       <AlertDialogContent>
@@ -221,7 +221,7 @@ export default function SubscribePage() {
                             consumption for the upcoming period of 90 days.
                           </p>
                           <p className="mt-4">
-                            The subscription renewal costs <b>20 DOT</b> and will expire
+                            The subscription renewal costs <b>10 DOT</b> and will expire
                             in 90days.
                           </p>
                         </div>
@@ -296,7 +296,7 @@ export default function SubscribePage() {
                               className="mx-2 inline-block"
                             />
                             <span className="mr-1">{selectedChain.name}</span>
-                            for 20 DOT now!
+                            for 10 DOT now!
                           </Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
@@ -312,7 +312,7 @@ export default function SubscribePage() {
                               consumption for the upcoming period of 90 days.
                             </p>
                             <p className="mt-4">
-                              The subscription costs <b>20 DOT</b> and will expire
+                              The subscription costs <b>10 DOT</b> and will expire
                               in 90days.
                             </p>
                           </div>
