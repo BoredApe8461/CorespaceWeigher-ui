@@ -19,20 +19,18 @@ const ChainSelect = ({
 }: {
   onlyRegistered?: boolean
 }) => {
-  const { chain, setChain, network } = useChain()
-  const { data: registeredChains, isLoading, isError } = useRegisteredChains()
+  const { chain, setChain, network } = useChain();
+  const { data: registeredChains, isLoading, isError } = useRegisteredChains();
 
-  const [chains, setChains]: [Array<Chain>, any] = useState([])
+  const [chains, setChains]: [Array<Chain>, any] = useState([]);
   const [chainId, setChainId] = useState<number | undefined>(
     chain?.paraId ?? undefined
-  )
+  );
 
   useEffect(() => {
     // Fetch chains based on the current network
     getChains(network).then((allChains) => {
-      let filteredChains = allChains
-
-      console.log("chains", allChains)
+      let filteredChains = allChains;
 
       // If onlyRegistered is true, further filter the chains to include only those that are registered
       if (onlyRegistered && registeredChains) {
@@ -54,7 +52,7 @@ const ChainSelect = ({
   return (
     <>
       <Select
-        value={chainId ? chainId.toString() : undefined}
+        value={chainId !== undefined ? chainId.toString() : undefined}
         onValueChange={(val) => {
           setChainId(Number(val))
           setChain(chains.find((c) => c.paraId === Number(val)))
@@ -66,7 +64,7 @@ const ChainSelect = ({
         <SelectContent className="items-start !text-left">
           {chains.map((chain: Chain, index) => (
             <SelectItem
-              value={chain.paraId ? chain.paraId.toString() : ""}
+              value={chain.paraId !== null ? chain.paraId.toString() : ""}
               key={chain.paraId}
               className="gap-2 text-left"
             >

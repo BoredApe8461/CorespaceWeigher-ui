@@ -95,7 +95,8 @@ export default function SubscribePage() {
   }, [selectedChain, registeredChains])
 
   async function handleSubscribe(op: Operation) {
-    if (!api || !activeAccount || !selectedNetwork || !selectedChain?.paraId) {
+    if (!api || !activeAccount || !selectedNetwork || 
+      selectedChain?.paraId == null || selectedChain?.paraId == undefined) {
       return
     }
 
@@ -185,7 +186,7 @@ export default function SubscribePage() {
                   {selectedChain.name} is already registered and will expire in:{" "}
                   <b>{chainStatus.expiryInDays}</b> days
                 </h2>
-                {chainStatus.expiryInDays && chainStatus.expiryInDays < 7 && (
+                {chainStatus.expiryInDays && chainStatus.expiryInDays < 30 && (
                   <div className="flex flex-row gap-2 mt-4 items-center justify-center">
                     <ConnectButton size="lg" />
                     <AlertDialog>
@@ -204,7 +205,7 @@ export default function SubscribePage() {
                             className="mx-2 inline-block"
                           />
                           <span className="mr-1">{selectedChain.name}</span>
-                          subscription for 20 DOT
+                          subscription for 10 DOT
                         </Button>
                       </AlertDialogTrigger>
                       <AlertDialogContent>
@@ -220,7 +221,7 @@ export default function SubscribePage() {
                             consumption for the upcoming period of 90 days.
                           </p>
                           <p className="mt-4">
-                            The subscription renewal costs <b>20 DOT</b> and will expire
+                            The subscription renewal costs <b>10 DOT</b> and will expire
                             in 90days.
                           </p>
                         </div>
@@ -295,7 +296,7 @@ export default function SubscribePage() {
                               className="mx-2 inline-block"
                             />
                             <span className="mr-1">{selectedChain.name}</span>
-                            for 20 DOT now!
+                            for 10 DOT now!
                           </Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
@@ -311,7 +312,7 @@ export default function SubscribePage() {
                               consumption for the upcoming period of 90 days.
                             </p>
                             <p className="mt-4">
-                              The subscription costs <b>20 DOT</b> and will expire
+                              The subscription costs <b>10 DOT</b> and will expire
                               in 90days.
                             </p>
                           </div>
@@ -322,12 +323,12 @@ export default function SubscribePage() {
                               onClick={() => handleSubscribe(Operation.Register)}
                               disabled={isAccountBalanceInsufficient}
                             >
-                              Subscribe
+                              Register
                             </AlertDialogAction>
                           </AlertDialogFooter>
                           {isAccountBalanceInsufficient && (
                             <div className="text-orange-500 text-xs text-right">
-                              ⚠️ Your account balance is too low to subscribe
+                              ⚠️ Your account balance is too low to register
                             </div>
                           )}
                         </AlertDialogContent>
