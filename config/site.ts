@@ -8,6 +8,7 @@ export const siteConfig = {
   backendUrl: "https://api.polkadot-weigher.com",
   blockExplorer: "https://polkadot.subscan.io//extrinsic/",
   subscriptionCost: "100000000000", // cost to register a parachain
+
   mainNav: [
     {
       title: "Historic Consumption",
